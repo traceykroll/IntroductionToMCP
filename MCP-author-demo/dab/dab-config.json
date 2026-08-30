@@ -1,0 +1,148 @@
+{
+  "$schema": "https://github.com/Azure/data-api-builder/releases/download/v2.0.12/dab.draft.schema.json",
+  "data-source": {
+    "database-type": "mssql",
+    "connection-string": "@env('MSSQL_CONNECTION_STRING')",
+    "options": {
+      "set-session-context": false
+    }
+  },
+  "runtime": {
+    "rest": {
+      "enabled": true,
+      "path": "/api",
+      "request-body-strict": false
+    },
+    "graphql": {
+      "enabled": true,
+      "path": "/graphql",
+      "allow-introspection": true
+    },
+    "mcp": {
+      "enabled": true,
+      "path": "/mcp"
+    },
+    "host": {
+      "cors": {
+        "origins": [],
+        "allow-credentials": false
+      },
+      "authentication": {
+        "provider": "Unauthenticated"
+      },
+      "mode": "development"
+    },
+    "telemetry": {
+      "open-telemetry": {
+        "enabled": true,
+        "endpoint": "@env('OTEL_EXPORTER_OTLP_ENDPOINT')",
+        "headers": "@env('OTEL_EXPORTER_OTLP_HEADERS')",
+        "service-name": "@env('OTEL_SERVICE_NAME')"
+      }
+    }
+  },
+  "autoentities": {},
+  "entities": {
+    "AccountStanding": {
+      "description": "Applies Bay State Supply's customer credit policy to an account and reports the result. Returns how many of the customer's last three completed orders carried a qualifying issue, the value of those orders, the maximum credit allowed, and whether the account is eligible. Read-only: it changes nothing. Call this before proposing any credit.",
+      "source": {
+        "object": "service.usp_GetAccountStanding",
+        "type": "stored-procedure",
+        "parameters": [
+          {
+            "name": "AccountNumber",
+            "description": "The customer account number, for example C-10041",
+            "required": true
+          }
+        ]
+      },
+      "fields": [],
+      "graphql": {
+        "enabled": true,
+        "operation": "query",
+        "type": {
+          "singular": "AccountStanding",
+          "plural": "AccountStandings"
+        }
+      },
+      "rest": {
+        "enabled": true,
+        "methods": [
+          "get"
+        ]
+      },
+      "permissions": [
+        {
+          "role": "anonymous",
+          "actions": [
+            {
+              "action": "execute"
+            }
+          ]
+        }
+      ],
+      "mcp": {
+        "custom-tool": true,
+        "dml-tools": false
+      }
+    },
+    "IssueServiceCredit": {
+        "description": "Issues a service credit to a customer account, or declines it. Determine an appropriate amount yourself from the account standing and the circumstances of the complaint, and propose it; do not ask the caller to supply a figure. Policy is enforced by the database, not by whoever calls this: a credit requires a qualifying issue on at least two of the last three completed orders, and may not exceed 15 percent of the value of those orders. The call fails with an explanatory error when either rule is not met. The role is taken from the database login and cannot be supplied by the caller.",
+        "source": {
+        "object": "service.usp_IssueServiceCredit",
+        "type": "stored-procedure",
+        "parameters": [
+          {
+            "name": "AccountNumber",
+            "description": "The customer account number, for example C-10041.",
+            "required": true
+          },
+          {
+            "name": "CreditAmount",
+            "description": "The credit amount in dollars. Must not exceed the maximum reported by account_standing, which will refuse anything higher.",
+            "required": true
+          },
+          {
+            "name": "Justification",
+            "description": "A short explanation of why the credit is being issued. Recorded on the audit row alongside the amount and the role that issued it.",
+            "required": true
+          },
+          {
+            "name": "OverrideReason",
+            "description": "Only used by a supervisor overriding the eligibility rule. Leave empty otherwise. A supervisor override without a reason is refused.",
+            "required": false
+          }
+        ]
+      },
+      "fields": [],
+      "graphql": {
+        "enabled": true,
+        "operation": "mutation",
+        "type": {
+          "singular": "IssueServiceCredit",
+          "plural": "IssueServiceCredits"
+        }
+      },
+      "rest": {
+        "enabled": true,
+        "methods": [
+          "post"
+        ]
+      },
+      "permissions": [
+        {
+          "role": "anonymous",
+          "actions": [
+            {
+              "action": "execute"
+            }
+          ]
+        }
+      ],
+      "mcp": {
+        "custom-tool": true,
+        "dml-tools": false
+      }
+    }
+  }
+}

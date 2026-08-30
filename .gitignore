@@ -1,0 +1,25 @@
+# Connection strings and secrets
+.env
+*.env
+!.env.example
+
+# Data API builder
+dab-config.*.json
+
+# Slides — the PDF is published, the source is not
+*.pptx
+*.potx
+~$*.pptx
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/settings.json
+.idea/
+
+# Build output
+bin/
+obj/
+node_modules/

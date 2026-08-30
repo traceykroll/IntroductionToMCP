@@ -1,0 +1,24 @@
+{
+  "servers": {
+    "baystate-sql": {
+      "type": "stdio",
+      "command": "/Users/Tracey/.dotnet/tools/dab",
+      "args": [
+        "start",
+        "--mcp-stdio",
+        "role:anonymous",
+        "--loglevel", "error",
+        "--config", "${workspaceFolder}/dab/dab-config.json"
+      ]
+    },
+    "baystate-files": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "${workspaceFolder}/invoices"
+      ]
+    }
+  }
+}

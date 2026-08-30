@@ -1,0 +1,143 @@
+{
+  "$schema": "https://github.com/Azure/data-api-builder/releases/download/v2.0.12/dab.draft.schema.json",
+  "data-source": {
+    "database-type": "mssql",
+    "connection-string": "@env('MSSQL_CONNECTION_STRING')",
+    "options": {
+      "set-session-context": false
+    }
+  },
+  "runtime": {
+    "rest": {
+      "enabled": true,
+      "path": "/api",
+      "request-body-strict": false
+    },
+    "graphql": {
+      "enabled": true,
+      "path": "/graphql",
+      "allow-introspection": true
+    },
+    "mcp": {
+      "enabled": true
+    },
+    "host": {
+      "cors": {
+        "origins": [],
+        "allow-credentials": false
+      },
+      "authentication": {
+        "provider": "Unauthenticated"
+      },
+      "mode": "development"
+    },
+    "telemetry": {
+      "open-telemetry": {
+        "enabled": true,
+        "endpoint": "@env('OTEL_EXPORTER_OTLP_ENDPOINT')",
+        "headers": "@env('OTEL_EXPORTER_OTLP_HEADERS')",
+        "service-name": "@env('OTEL_SERVICE_NAME')"
+      }
+    }
+  },
+  "autoentities": {},
+  "entities": {
+    "POReconciliation": {
+      "description": "One row per purchase order line, joined to the goods receipt, the vendor, and the contract price in force on the order date. Use this to check a vendor invoice line against what was ordered, what arrived, and what was agreed.",
+      "source": {
+        "object": "purchasing.vw_POReconciliation",
+        "type": "table"
+      },
+      "fields": [
+        {
+          "name": "OrderDate",
+          "description": "Date the purchase order was placed. This determines which contract price applies",
+          "primary-key": false
+        },
+        {
+          "name": "UOMConv",
+          "description": "How many individual units make up one purchase unit. A value of 12 means one case contains 12 units. To compare a purchase order line against an invoice billed per individual unit",
+          "primary-key": false
+        },
+        {
+          "name": "PurchaseUOM",
+          "description": "Unit the item is bought and priced in. EA means individually. CS means by the case",
+          "primary-key": false
+        },
+        {
+          "name": "POUnitPrice",
+          "description": "Agreed price for one OrderUOM on this purchase order line.",
+          "primary-key": false
+        },
+        {
+          "name": "ContractUnitPrice",
+          "description": "Contract price for this item and vendor that was in force on the order date.",
+          "primary-key": false
+        },
+        {
+          "name": "QtyReceived",
+          "description": "Quantity received at the dock. May be less than the quantity ordered. A short shipment should be invoiced at the quantity received.",
+          "primary-key": false
+        },
+        {
+          "name": "POLineID",
+          "primary-key": true
+        }
+      ],
+      "graphql": {
+        "enabled": true,
+        "type": {
+          "singular": "POReconciliation",
+          "plural": "POReconciliations"
+        }
+      },
+      "rest": {
+        "enabled": true
+      },
+      "permissions": [
+        {
+          "role": "anonymous",
+          "actions": [
+            {
+              "action": "read"
+            }
+          ]
+        }
+      ]
+    },
+    "Invoice": {
+      "description": "Vendor invoices already entered for payment. Check here before approving a new invoice to confirm the same charges have not already been paid.",
+      "source": {
+        "object": "purchasing.Invoice",
+        "type": "table"
+      },
+      "fields": [
+        {
+          "name": "PaymentStatus",
+          "description": "Open",
+          "primary-key": false
+        }
+      ],
+      "graphql": {
+        "enabled": true,
+        "type": {
+          "singular": "Invoice",
+          "plural": "Invoices"
+        }
+      },
+      "rest": {
+        "enabled": true
+      },
+      "permissions": [
+        {
+          "role": "anonymous",
+          "actions": [
+            {
+              "action": "read"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

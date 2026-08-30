@@ -1,0 +1,29 @@
+From: Sean Whitaker <invoices@braddock.example.com>
+To: Accounts Payable <ap@baystatesupply.example.com>
+Date: Mon, 3 Aug 2026 09:14:22 -0400
+Subject: SECOND NOTICE - Braddock Components invoice BC-77341
+
+Hi,
+
+Following up on the below - our records still show this as outstanding and
+it is now well past terms. Could someone take a look and let me know where
+it stands? Happy to resend backup if that helps.
+
+    Invoice number ....... BC-77341
+    Invoice date ......... August 3, 2026
+    Your purchase order .. PO-4462
+    Terms ................ Net 30
+
+    60 ea   Ball Bearing 6205-2RS  @  84.50 ea   ...........  5,070.00
+                                                             ---------
+                                        AMOUNT DUE (USD)      5,070.00
+
+Remit to:
+    Braddock Components
+    88 Furnace Street
+    Braddock PA 15104
+
+Thanks,
+Sean Whitaker
+Accounts Receivable, Braddock Components
+(412) 555-0193
