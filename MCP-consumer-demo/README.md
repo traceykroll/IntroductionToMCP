@@ -51,8 +51,8 @@ instructions.
 Run the two scripts in order against your SQL Server instance.
 
 ```
-sql/01_schema.sql     tables, view, and column descriptions
-sql/02_seed.sql       vendors, items, contract pricing, orders, receipts, payment history
+01_schema.sql     tables, view, and column descriptions
+02_seed.sql       vendors, items, contract pricing, orders, receipts, payment history
 ```
 
 Both are idempotent and can be rerun at any time to reset the data.
@@ -527,13 +527,13 @@ MCP-consumer-demo/
 ├── README.md
 ├── .vscode/
 │   └── mcp.json      only if using VS Code
-├── sql/
-│   ├── 01_schema.sql
-│   └── 02_seed.sql
+├── 01_schema.sql
+├── 02_seed.sql
+├── .env.example      copy to dab/.env and set your password
 ├── invoices/         the four invoices and the purchasing terms
+├── logos/            vendor and Bay State Supply logos
 └── dab/
-    ├── dab-config.json
-    └── .env.example  copy to .env and set your password
+    └── dab-config.json
 ```
 
 ---

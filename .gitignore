@@ -5,6 +5,7 @@
 
 # Data API builder
 dab-config.*.json
+!dab-config.supervisor.json
 
 # Slides — the PDF is published, the source is not
 *.pptx

@@ -2,7 +2,7 @@
   "servers": {
     "baystate-sql": {
       "type": "stdio",
-      "command": "/Users/Tracey/.dotnet/tools/dab",
+      "command": "dab",
       "args": [
         "start",
         "--mcp-stdio",

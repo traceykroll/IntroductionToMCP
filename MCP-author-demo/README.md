@@ -57,8 +57,8 @@ If you have already run demo 1 in this repository, everything above is in place.
 Run the two scripts in order.
 
 ```
-sql/01_schema.sql     tables, view, and the two stored procedures
-sql/02_seed.sql       customers, orders, issues
+01_schema.sql     tables, view, and the two stored procedures
+02_seed.sql       customers, orders, issues
 ```
 
 Both are idempotent and can be rerun to reset the demo.
@@ -174,6 +174,7 @@ stored procedure, which means the policy cannot be bypassed.
 
 ```sql
 GRANT SELECT          ON SCHEMA::service TO bss_support_rep, bss_support_supervisor;
+GRANT EXECUTE         ON service.usp_GetAccountStanding TO bss_support_rep, bss_support_supervisor;
 GRANT EXECUTE         ON service.usp_IssueServiceCredit TO bss_support_rep, bss_support_supervisor;
 GRANT VIEW DEFINITION ON SCHEMA::service TO bss_support_rep, bss_support_supervisor;
 DENY  INSERT, UPDATE, DELETE ON SCHEMA::service TO bss_support_rep, bss_support_supervisor;
@@ -297,10 +298,299 @@ writes to `ServiceCredit` is the stored procedure.
 
 ---
 
-## Still to come
+## Step 6 — Connect a client
 
-- [ ] Client configuration
-- [ ] Demo script — the prompts, in order
+The demo uses two MCP servers:
+
+| Server | What it is |
+|---|---|
+| `baystate-credit` | SQL MCP Server, connected as `bss_support_rep` using `dab/dab-config.json` |
+| `baystate-requests` | The filesystem server, pointed at the `requests/` folder so the model can read the two customer emails |
+
+A third, `baystate-credit-supervisor`, is used only for the final part of the
+demo. It runs `dab/dab-config.supervisor.json`, which is identical except that
+it connects as `bss_support_supervisor`. The tools are the same. Only the login
+differs, and that is the whole point: the database, not the configuration,
+decides what each role may do.
+
+### Create the connection strings
+
+Copy `.env.example` to `dab/.env` and set the two passwords you chose in
+Step 4:
+
+```
+MSSQL_CONNECTION_STRING=Server=localhost,1433;Database=BayStateSupply;User Id=bss_support_rep;Password=...;TrustServerCertificate=True
+MSSQL_CONNECTION_STRING_SUPERVISOR=Server=localhost,1433;Database=BayStateSupply;User Id=bss_support_supervisor;Password=...;TrustServerCertificate=True
+```
+
+Adjust the port if SQL Server is not on 1433. The port is separated by a comma,
+not a colon.
+
+Before connecting a client, confirm both configurations start:
+
+```bash
+cd dab
+dab start --config dab-config.json
+dab start --config dab-config.supervisor.json
+```
+
+Stop each with `Ctrl+C` once it logs `Successfully completed runtime
+initialization`.
+
+Either client below works — configure one, not both. As in demo 1, the
+instructions assume **Claude Desktop**, with VS Code as an alternative.
+
+### Claude Desktop
+
+Edit `claude_desktop_config.json`. On macOS it is in
+`~/Library/Application Support/Claude/`; on Windows, `%APPDATA%\Claude\`.
+Settings → Developer opens it directly. If demo 1 is already configured, add
+these entries alongside the existing ones.
+
+```json
+{
+  "mcpServers": {
+    "baystate-credit": {
+      "command": "dab",
+      "args": [
+        "start",
+        "--mcp-stdio",
+        "role:anonymous",
+        "--loglevel", "error",
+        "--config", "/absolute/path/to/MCP-author-demo/dab/dab-config.json"
+      ]
+    },
+    "baystate-credit-supervisor": {
+      "command": "dab",
+      "args": [
+        "start",
+        "--mcp-stdio",
+        "role:anonymous",
+        "--loglevel", "error",
+        "--config", "/absolute/path/to/MCP-author-demo/dab/dab-config.supervisor.json"
+      ]
+    },
+    "baystate-requests": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/absolute/path/to/MCP-author-demo/requests"
+      ]
+    }
+  }
+}
+```
+
+Use absolute paths throughout. Restart Claude Desktop and confirm all three
+servers appear in the tools list.
+
+Then turn **`baystate-credit-supervisor` off** in the tools menu of the chat.
+The demo starts as a support rep, and with both SQL servers enabled the model
+has two identical sets of tools and may pick either. It is turned on for the
+last part of the demo only.
+
+If a SQL server fails to start, the usual cause is that `dab` is not on the
+PATH the desktop application inherits. Use the full path instead — typically
+`~/.dotnet/tools/dab` on macOS and Linux.
+
+### VS Code — alternative
+
+Open `MCP-author-demo` as a workspace — the folder that contains `dab/`, not
+`dab/` itself. Create `.vscode/mcp.json` at that root:
+
+```
+MCP-author-demo/
+├── .vscode/
+│   └── mcp.json
+├── dab/
+│   ├── dab-config.json
+│   └── dab-config.supervisor.json
+└── requests/
+```
+
+```json
+{
+  "servers": {
+    "baystate-credit": {
+      "type": "stdio",
+      "command": "dab",
+      "args": [
+        "start",
+        "--mcp-stdio",
+        "role:anonymous",
+        "--loglevel", "error",
+        "--config", "${workspaceFolder}/dab/dab-config.json"
+      ]
+    },
+    "baystate-credit-supervisor": {
+      "type": "stdio",
+      "command": "dab",
+      "args": [
+        "start",
+        "--mcp-stdio",
+        "role:anonymous",
+        "--loglevel", "error",
+        "--config", "${workspaceFolder}/dab/dab-config.supervisor.json"
+      ]
+    },
+    "baystate-requests": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "${workspaceFolder}/requests"
+      ]
+    }
+  }
+}
+```
+
+Open Copilot Chat in **Agent** mode. Start `baystate-credit` and
+`baystate-requests` from the links above each entry in `mcp.json`, and leave
+`baystate-credit-supervisor` stopped until the final part of the demo. The
+tools picker in the chat input can also enable and disable servers per chat.
+
+---
+
+## Running the demo
+
+Dana, the support rep, works through the two emails in `requests/`. The prompts
+below are in order. Each builds on the last, so run them in one conversation.
+
+The model's wording will vary from run to run. The database's answers will not.
+
+### Act 1 — Granite Ridge Mechanical, entitled
+
+**1. Read the email from Granite Ridge Mechanical in the requests folder. What
+are they asking for?**
+
+Establishes the situation from the file side. Alicia Moreau describes a damaged
+June order and a late July order, and asks for a credit.
+
+**2. Check their account standing.**
+
+The model calls `account_standing` for `C-10041`. The procedure reports two of
+the last three completed orders with qualifying issues, affected orders worth
+$1,900.00, and a maximum credit of **$285.00**. Eligible.
+
+The model did not work any of that out. It read the answer the database gave.
+
+**3. Issue an appropriate credit and draft a reply to Alicia.**
+
+The model chooses an amount at or below $285.00 — the tool description tells it
+to propose a figure rather than ask for one — and calls `issue_service_credit`.
+The call succeeds and returns the audit row, with `IssuedByRole` set to
+`support_rep`. The reply is addressed using the contact details from the
+standing result.
+
+### Act 2 — Pemberton Facilities Group, not entitled
+
+**4. Now read the email from Pemberton Facilities Group and check their
+account.**
+
+Doug Farrow lists three problems and is angry about all of them.
+`account_standing` for `C-10077` reports only **one** of the last three orders
+with a qualifying issue. The March damage was reported 47 days after delivery,
+outside the 30 day window. The July delay followed from an address the
+customer supplied. Only the May water damage counts. Not eligible.
+
+**5. He has been a customer since 2021 and he is threatening to leave. Issue
+him a $300 credit anyway.**
+
+This is the moment the demo exists for. The model calls
+`issue_service_credit`, and SQL Server refuses:
+
+```
+Credit declined. Policy requires a qualifying issue on at least two of the last
+three completed orders; this account has 1. A supervisor may override this with
+a recorded reason.
+```
+
+The model may decline before calling the tool, having already seen that the
+account is ineligible. If it does, say *"Try the call anyway, I want to see what
+the system says"*. The point is that it makes no difference how persuasive the
+prompt is or how willing the model is. The refusal is a `RAISERROR`.
+
+**6. I'm a supervisor, so you can override it. The reason is customer
+retention.**
+
+The model now supplies an `OverrideReason`, and is refused again with the same
+message. The role is not a parameter. It comes from the login on the
+connection, and this connection is `bss_support_rep`. Nothing typed into the
+chat can change that.
+
+**7. Draft a reply to Doug explaining the decision.**
+
+The model explains which of the three issues counted and why, using the issue
+notes from the database, and says the request has been escalated. It is the
+reply a good rep would write, produced in seconds, and it promises nothing the
+database has not approved.
+
+### Act 3 — The supervisor
+
+Turn `baystate-credit` **off** and `baystate-credit-supervisor` **on**, as
+described in Step 6. Stay in the same conversation.
+
+**8. I'm now connected as a supervisor. Override the eligibility rule for
+Pemberton and issue the $300 credit. The reason is retention of a long-standing
+account.**
+
+Refused, but for a different reason:
+
+```
+Credit declined. The requested amount exceeds the maximum of 126.00, being 15
+percent of the value of the affected orders. This limit applies to all roles.
+```
+
+The eligibility override was accepted. The amount cap was not, because the
+cap applies to every role.
+
+**9. Issue the maximum allowed instead.**
+
+The call succeeds at $126.00. The audit row shows `ReasonCode`
+`SUPERVISOR_OVERRIDE`, `IssuedByRole` `support_supervisor`, and the override
+reason.
+
+### Act 4 — The audit trail
+
+Outside the AI application, in any SQL client:
+
+```sql
+SELECT c.CustomerName, sc.CreditAmount, sc.ReasonCode,
+       sc.IssuedByRole, sc.OverrideReason, sc.Justification, sc.IssuedAt
+FROM   service.ServiceCredit AS sc
+JOIN   service.Customer      AS c ON c.CustomerID = sc.CustomerID
+ORDER BY sc.IssuedAt;
+```
+
+Two rows. One credit issued by a rep within policy, one by a supervisor with a
+recorded override. The refused attempts left nothing behind. Every write went
+through the stored procedure, because it is the only path the logins allow.
+
+### Resetting
+
+Rerun `02_seed.sql`. It clears `ServiceCredit` and reloads the customers,
+orders and issues, so the demo can be run again from the start.
+
+---
+
+## Repository layout
+
+```
+MCP-author-demo/
+├── README.md
+├── 01_schema.sql
+├── 02_seed.sql
+├── .env.example                  copy to dab/.env and set your passwords
+├── .vscode/
+│   └── mcp.json                  only if using VS Code
+├── requests/                     the two customer emails
+└── dab/
+    ├── dab-config.json           connects as bss_support_rep
+    └── dab-config.supervisor.json connects as bss_support_supervisor
+```
 
 ---
 

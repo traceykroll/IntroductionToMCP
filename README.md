@@ -1,7 +1,9 @@
 # Introduction to MCP
 
 Talk materials and two working demonstrations of the Model Context Protocol,
-built for an audience of DBAs, SQL developers and business users.
+built for an audience of DBAs, SQL developers and business users. Each demo
+contains the sample data, the code, and a full step-by-step walkthrough, with
+instructions for both Claude Desktop and VS Code.
 
 Everything here runs against SQL Server. No Python, and no code beyond the SQL
 you would write anyway.
@@ -50,27 +52,27 @@ that went wrong the first time.
 
 ## Resources
 
-### The protocol itself
+### MCP fundamentals
 
 | | |
 |---|---|
-| [Model Context Protocol](https://modelcontextprotocol.io/) | Official documentation. Start here |
-| [Getting started](https://modelcontextprotocol.io/docs/getting-started/intro) | Concepts and quickstarts |
-| [Specification](https://modelcontextprotocol.io/specification/2025-11-25) | The authoritative protocol requirements |
-| [Specification repository](https://github.com/modelcontextprotocol/modelcontextprotocol) | Schema source and proposed changes |
-| [Reference servers](https://github.com/modelcontextprotocol/servers) | Official implementations, including the filesystem server used in demo 1 |
-| [MCP Inspector](https://github.com/modelcontextprotocol/inspector) | Shows exactly what an agent sees. Worth running before connecting any client |
-| [The original announcement](https://www.anthropic.com/news/model-context-protocol) | Anthropic's launch post, for the design rationale |
+| [Model Context Protocol](https://modelcontextprotocol.io/) | The official site and documentation. Start here |
+| [Getting started](https://modelcontextprotocol.io/docs/getting-started/intro) | Concepts and quickstarts on the same site |
+| [Specification](https://modelcontextprotocol.io/specification/latest) | The authoritative protocol requirements, written for implementers |
+| [Specification repository](https://github.com/modelcontextprotocol/modelcontextprotocol) | The GitHub repository behind the specification, holding the schema it is generated from and the discussion of proposed changes |
+| [Reference servers](https://github.com/modelcontextprotocol/servers) | Official server implementations on GitHub, to read and to run, including the filesystem server used in demo 1 |
+| [MCP Inspector](https://github.com/modelcontextprotocol/inspector) | A browser tool on GitHub that shows exactly what an agent sees. Worth running before connecting any client |
+| [The original announcement](https://www.anthropic.com/news/model-context-protocol) | The post on Anthropic's blog that introduced MCP, and the problem it was built to solve |
 
 ### SQL Server
 
 | | |
 |---|---|
-| [SQL MCP Server](https://learn.microsoft.com/en-us/sql/mcp/) | Microsoft's open-source MCP server for SQL databases. Used in both demos |
-| [Data API builder — MCP](https://learn.microsoft.com/en-us/azure/data-api-builder/mcp/overview) | How entities become tools |
-| [VS Code quickstart](https://learn.microsoft.com/en-us/azure/data-api-builder/mcp/quickstart-visual-studio-code) | The setup these demos are based on |
-| [Role-based access control](https://learn.microsoft.com/en-us/azure/data-api-builder/authorization) | Permissions, roles, and what production looks like |
-| [SQL Server (mssql) extension](https://marketplace.visualstudio.com/items?itemName=ms-mssql.mssql) | For VS Code. Azure Data Studio retired in February 2026 |
+| [SQL MCP Server](https://learn.microsoft.com/en-us/sql/mcp/) | Microsoft Learn documentation for the open-source MCP server for SQL databases that both demos use |
+| [Data API builder — MCP](https://learn.microsoft.com/en-us/azure/data-api-builder/mcp/overview) | Microsoft Learn documentation on how entities become tools |
+| [VS Code quickstart](https://learn.microsoft.com/en-us/azure/data-api-builder/mcp/quickstart-visual-studio-code) | The Microsoft Learn walkthrough these demos are based on |
+| [Role-based access control](https://learn.microsoft.com/en-us/azure/data-api-builder/authorization) | Microsoft Learn documentation on permissions, roles, and what production looks like |
+| [SQL Server (mssql) extension](https://marketplace.visualstudio.com/items?itemName=ms-mssql.mssql) | The SQL client used throughout, from the Visual Studio Marketplace, now that Azure Data Studio has retired |
 
 ### Security
 
@@ -78,16 +80,16 @@ Worth reading before you expose anything you care about.
 
 | | |
 |---|---|
-| [OWASP MCP Top 10 for Azure](https://microsoft.github.io/mcp-azure-security-guide/) | The ten most critical risks, with practical guidance |
-| [MCP for Beginners: Security](https://github.com/microsoft/mcp-for-beginners/blob/main/02-Security/README.md) | Microsoft's security chapter, including prompt injection and tool poisoning |
-| [Security best practices](https://github.com/microsoft/mcp-for-beginners/blob/main/02-Security/mcp-best-practices.md) | Token validation, session handling, input validation |
-| [Understanding and mitigating MCP security risks](https://techcommunity.microsoft.com/blog/microsoft-security-blog/understanding-and-mitigating-security-risks-in-mcp-implementations/4404667) | Microsoft's overview of where the risks actually are |
+| [OWASP MCP Top 10 for Azure](https://microsoft.github.io/mcp-azure-security-guide/) | Microsoft's guide to the ten most critical risks, with practical advice on each |
+| [MCP for Beginners: Security](https://github.com/microsoft/mcp-for-beginners/blob/main/02-Security/README.md) | The security chapter of Microsoft's curriculum on GitHub, including prompt injection and tool poisoning |
+| [Security best practices](https://github.com/microsoft/mcp-for-beginners/blob/main/02-Security/mcp-best-practices.md) | Token validation, session handling and input validation, from the same curriculum |
+| [Understanding and mitigating MCP security risks](https://techcommunity.microsoft.com/blog/microsoft-security-blog/understanding-and-mitigating-security-risks-in-mcp-implementations/4404667) | An overview on the Microsoft Tech Community blog of where the risks actually are |
 
 ### Learning more
 
 | | |
 |---|---|
-| [MCP for Beginners](https://github.com/microsoft/mcp-for-beginners) | Microsoft's open-source curriculum. Cross-language, hands-on, and free |
+| [MCP for Beginners](https://github.com/microsoft/mcp-for-beginners) | Microsoft's open-source curriculum on GitHub. Cross-language, hands-on, and free |
 
 ---
 
