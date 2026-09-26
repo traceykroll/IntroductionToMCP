@@ -24,3 +24,6 @@ Thumbs.db
 bin/
 obj/
 node_modules/
+
+# Local workaround for draft-07 schema rejection in Claude Desktop
+mcp-schema-proxy.js

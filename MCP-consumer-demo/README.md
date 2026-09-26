@@ -456,7 +456,8 @@ npx -y @modelcontextprotocol/inspector http://localhost:5000/mcp
 
 Four prompts, in order. Each builds on the last.
 
-**1. Read the invoices in this folder and tell me what is in them.**
+**1. Read the invoices in baystate files. Give me a table containing the vendor,
+invoice number, date, PO, terms, line items, and total.**
 
 Establishes the file side. The four documents arrive in four different formats,
 with different column names, date formats and part numbering.
