@@ -270,6 +270,12 @@ dab update POReconciliation --fields.name ContractUnitPrice \
 dab update POReconciliation --fields.name QtyReceived \
   --fields.description "Quantity received at the dock. May be less than the quantity ordered. A short shipment should be invoiced at the quantity received."
 
+dab update POReconciliation --fields.name POID \
+  --fields.description "Internal purchase order ID. Use it to find invoices for this purchase order: Invoice.POID holds the same value."
+
+dab update Invoice --fields.name POID \
+  --fields.description "Internal ID of the purchase order this invoice was billed against. Matches POID in POReconciliation: look up the PONumber there to get its POID, then filter invoices on it."
+
 dab update Invoice --fields.name PaymentStatus \
   --fields.description "Open, Paid or Void. An invoice already marked Paid must not be paid again. Vendors occasionally resubmit the same charges under a new number or a new date."
 ```

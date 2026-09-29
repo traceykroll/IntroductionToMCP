@@ -234,6 +234,7 @@ GO
 CREATE VIEW purchasing.vw_POReconciliation
 AS
 SELECT
+    poh.POID,
     poh.PONumber,
     poh.OrderDate,
     poh.POStatus,
@@ -357,6 +358,9 @@ EXEC purchasing.usp_SetColumnDescription 'ContractPrice', 'ContractPrice',
      N'Agreed price per PriceUOM under the supply contract named in ContractRef.';
 
 -- Invoices -------------------------------------------------------------
+EXEC purchasing.usp_SetColumnDescription 'Invoice', 'POID',
+     N'Internal ID of the purchase order this invoice was billed against. Matches POID in vw_POReconciliation - look up the PONumber there to find its POID, then filter invoices on it.';
+
 EXEC purchasing.usp_SetColumnDescription 'Invoice', 'InvoiceNumber',
      N'Vendor-supplied invoice number. Not guaranteed unique across resubmissions - vendors occasionally resubmit the same charges under a new number or a new invoice date.';
 

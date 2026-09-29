@@ -50,6 +50,11 @@
       },
       "fields": [
         {
+          "name": "POID",
+          "description": "Internal purchase order ID. Use it to find invoices for this purchase order: Invoice.POID holds the same value.",
+          "primary-key": false
+        },
+        {
           "name": "OrderDate",
           "description": "Date the purchase order was placed. This determines which contract price applies",
           "primary-key": false
@@ -112,6 +117,11 @@
         "type": "table"
       },
       "fields": [
+        {
+          "name": "POID",
+          "description": "Internal ID of the purchase order this invoice was billed against. Matches POID in POReconciliation: look up the PONumber there to get its POID, then filter invoices on it.",
+          "primary-key": false
+        },
         {
           "name": "PaymentStatus",
           "description": "Open",
