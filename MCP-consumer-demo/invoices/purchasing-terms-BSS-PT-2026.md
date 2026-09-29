@@ -84,15 +84,23 @@ effective price.
 **5.1** Unit prices are inclusive of freight, fuel, energy, handling, packaging,
 palletisation and delivery to Buyer's Norwood facility.
 
-**5.2** **No accessorial charge, fuel surcharge, energy surcharge, delivery fee,
-minimum order charge or similar charge may be added to an invoice unless it
-appears as a separate line item on the purchase order and was agreed in writing
-before the goods were shipped.**
+**5.2** **Fuel surcharges are prohibited.** Supplier shall not invoice any fuel
+surcharge, fuel adjustment, fuel recovery fee (including any line described as
+"FSC") or any other charge calculated by reference to fuel prices, whether
+expressed as a percentage, a flat amount or otherwise. This prohibition is
+absolute: Buyer does not agree to fuel surcharges under any Pricing Agreement,
+will not issue a purchase order line for one, and no fuel surcharge is payable
+in any circumstances.
 
-**5.3** Charges added in breach of clause 5.2 will be deducted from payment and
-Supplier will be notified of the deduction.
+**5.3** No other accessorial charge, energy surcharge, delivery fee, minimum
+order charge or similar charge may be added to an invoice unless it appears as a
+separate line item on the purchase order and was agreed in writing before the
+goods were shipped.
 
-**5.4** Buyer will not accept invoices for expedited or premium freight unless
+**5.4** Charges added in breach of clause 5.2 or 5.3 will be deducted from
+payment and Supplier will be notified of the deduction.
+
+**5.5** Buyer will not accept invoices for expedited or premium freight unless
 the expediting was requested by Buyer in writing.
 
 ---
@@ -144,8 +152,7 @@ charges and duplicate billing.
 
 ### 9. Disputes
 
-**9.1** Buyer shall notify Supplier of any disputed charge within sixty (60) days
-of the invoice date.
+**9.1** Buyer shall notify Supplier of any disputed charge.
 
 **9.2** Supplier shall respond to a disputed charge within fifteen (15) business
 days.
