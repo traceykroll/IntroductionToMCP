@@ -10,22 +10,25 @@ rule lives in a prompt.
 
 ## The use case
 
-Dana works in customer service at Bay State Supply. A customer is on the phone.
-Their recent orders have gone badly and they are asking for a credit.
+Bay State Supply sells industrial parts. When an order arrives late or
+damaged, customers email customer service.
 
-Bay State has a policy for this, and it is not complicated:
+Dana handles those emails. For each one she has to work out whether the
+customer is owed a credit, and how much. Bay State's policy is simple enough
+to state — two bad orders out of the customer's last three earns a credit, up
+to fifteen percent — but applying it isn't. The complaint is an email. The
+order history, the promised dates and the delivery dates are in the database.
+Dana reads one, looks up the other, counts, decides, and then the credit has
+to be issued and recorded against the account.
 
-> Review the customer's last three completed orders. If two or more had a
-> qualifying problem — a late delivery, a damaged item, an incorrect item — a
-> credit may be issued, up to 15 percent of the value of the affected orders.
+When a batch comes in it takes most of an afternoon, and it is the same work
+every time.
 
-Dana can read that policy. Dana can see the orders. What Dana cannot do is
-apply it: the authority to issue a credit sits with a supervisor. So the request
-goes to an inbox, the supervisor is in a meeting, and the customer waits two
-days for a decision that takes four seconds.
-
-The problem is not that the data is hard to reach. It is that the decision sits
-in a different person's calendar.
+A data-entry screen wouldn't fix it. The evidence that triggers a credit
+arrives as unstructured text from customers, so somebody still has to read it
+and line it up against the record. What Dana needs is something that can read
+both, apply the rule, and write the result — under her authority, with an
+audit trail behind it.
 
 ### Two customers
 
