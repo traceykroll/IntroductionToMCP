@@ -193,16 +193,21 @@ running the procedure but not inspecting it, and the server fails to start with
 ## Step 5 — Expose both procedures as tools
 
 [SQL MCP Server](https://learn.microsoft.com/en-us/sql/mcp/) is configured with a
-JSON file. Install and initialise it as described in demo 1, then add the two
-stored procedures.
+JSON file. Install and initialise it as described in demo 1. By default the
+server also publishes REST and GraphQL endpoints, which this demo does not use, so
+turn them off to leave only the MCP endpoint:
+
+```bash
+dab configure --runtime.rest.enabled false --runtime.graphql.enabled false
+```
+
+Then add the two stored procedures.
 
 ```bash
 dab add AccountStanding \
   --source service.usp_GetAccountStanding \
   --source.type stored-procedure \
   --permissions "anonymous:execute" \
-  --rest.methods get \
-  --graphql.operation query \
   --mcp.custom-tool true \
   --mcp.dml-tools false \
   --description "Applies Bay State Supply's customer credit policy to an account and reports the result. Read-only: it changes nothing. Call this before proposing any credit."
@@ -211,8 +216,6 @@ dab add IssueServiceCredit \
   --source service.usp_IssueServiceCredit \
   --source.type stored-procedure \
   --permissions "anonymous:execute" \
-  --rest.methods post \
-  --graphql.operation mutation \
   --mcp.custom-tool true \
   --mcp.dml-tools false \
   --description "Issues a service credit to a customer account, or declines it. Policy is enforced by the database, not by the caller. The call fails with an explanatory error when a rule is not met."

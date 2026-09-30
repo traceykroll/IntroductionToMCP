@@ -9,14 +9,10 @@
   },
   "runtime": {
     "rest": {
-      "enabled": true,
-      "path": "/api",
-      "request-body-strict": false
+      "enabled": false
     },
     "graphql": {
-      "enabled": true,
-      "path": "/graphql",
-      "allow-introspection": true
+      "enabled": false
     },
     "mcp": {
       "enabled": true,
@@ -57,20 +53,6 @@
         ]
       },
       "fields": [],
-      "graphql": {
-        "enabled": true,
-        "operation": "query",
-        "type": {
-          "singular": "AccountStanding",
-          "plural": "AccountStandings"
-        }
-      },
-      "rest": {
-        "enabled": true,
-        "methods": [
-          "get"
-        ]
-      },
       "permissions": [
         {
           "role": "anonymous",
@@ -87,8 +69,8 @@
       }
     },
     "IssueServiceCredit": {
-        "description": "Issues a service credit to a customer account, or declines it. Determine an appropriate amount yourself from the account standing and the circumstances of the complaint, and propose it; do not ask the caller to supply a figure. Policy is enforced by the database, not by whoever calls this: a credit requires a qualifying issue on at least two of the last three completed orders, and may not exceed 15 percent of the value of those orders. The call fails with an explanatory error when either rule is not met. The role is taken from the database login and cannot be supplied by the caller.",
-        "source": {
+      "description": "Issues a service credit to a customer account, or declines it. Determine an appropriate amount yourself from the account standing and the circumstances of the complaint, and propose it; do not ask the caller to supply a figure. Policy is enforced by the database, not by whoever calls this: a credit requires a qualifying issue on at least two of the last three completed orders, and may not exceed 15 percent of the value of those orders. The call fails with an explanatory error when either rule is not met. The role is taken from the database login and cannot be supplied by the caller.",
+      "source": {
         "object": "service.usp_IssueServiceCredit",
         "type": "stored-procedure",
         "parameters": [
@@ -115,20 +97,6 @@
         ]
       },
       "fields": [],
-      "graphql": {
-        "enabled": true,
-        "operation": "mutation",
-        "type": {
-          "singular": "IssueServiceCredit",
-          "plural": "IssueServiceCredits"
-        }
-      },
-      "rest": {
-        "enabled": true,
-        "methods": [
-          "post"
-        ]
-      },
       "permissions": [
         {
           "role": "anonymous",
