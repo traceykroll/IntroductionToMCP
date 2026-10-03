@@ -113,3 +113,6 @@ Code and sample data are MIT licensed. See [LICENSE](./LICENSE).
 
 Bay State Supply is fictional. Every vendor, customer, contact, item, price,
 order and invoice in this repository is invented.
+
+Content in this readme was created in part with AI. 
+Last Updated: 10/3/2026
