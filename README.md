@@ -90,7 +90,7 @@ Worth reading before you expose anything you care about.
 | | |
 |---|---|
 | [MCP for Beginners](https://github.com/microsoft/mcp-for-beginners) | Microsoft's open-source curriculum on GitHub. Cross-language, hands-on, and free |
-
+| [MCP Explained](https://medium.com/@laurentkubaski/mcp-explained-45312250b161) | A great series of articles, including info on the two primitives, resources and prompts, that were not shown in this demo |
 ---
 
 ## A note on scope
@@ -115,4 +115,4 @@ Bay State Supply is fictional. Every vendor, customer, contact, item, price,
 order and invoice in this repository is invented.
 
 Content in this readme was created in part with AI. 
-Last Updated: 10/3/2026
+Last Updated: 10/28/2026
